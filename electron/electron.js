@@ -11,7 +11,12 @@ let nuxtProcess
 let nuxtServerPath
 let loadURL
 
-dotenv.config({ path: path.join(process.resourcesPath, 'app', '.env') })
+if (app.isPackaged) {
+    dotenv.config({path: path.join(process.resourcesPath, 'app.asar', '.env')})
+} else {
+    dotenv.config({path: path.join(process.resourcesPath, 'app', '.env')})
+}
+
 const buildMode = process.env.BUILD_MODE
 
 if (buildMode === 'static') {
@@ -19,7 +24,8 @@ if (buildMode === 'static') {
     // Fixes file:// problem
     const __filename = fileURLToPath(import.meta.url)
     const __dirname = path.dirname(__filename)
-    const dist = path.join(__dirname, '..', '.output', 'public')
+    const dist = path.join(__dirname, '..', '..', 'app.asar.unpacked', '.output', 'public')
+    console.error(dist)
     loadURL = serve({ directory: dist })
 }
 
@@ -38,11 +44,10 @@ async function createWindow(port) {
     })
 
     if (app.isPackaged) {
+        win.loadFile(path.join(process.resourcesPath, 'app.asar', 'electron', 'loader.html'))
         if (buildMode === 'node-server') {
             // Running non-static builds
-            win.loadFile(path.join(process.resourcesPath, 'app', 'electron', 'loader.html'))
-
-            nuxtServerPath = path.join(process.resourcesPath, 'app', '.output', 'server', 'index.mjs')
+            nuxtServerPath = path.join(process.resourcesPath, 'app.asar.unpacked', '.output', 'server', 'index.mjs')
             nuxtProcess = utilityProcess.fork(nuxtServerPath, [], {
                 windowsHide: true,
                 env: {
@@ -55,7 +60,7 @@ async function createWindow(port) {
             await win.loadURL(`http://localhost:${port}`)
         } else {
             // Running static builds
-            win.loadFile(path.join(process.resourcesPath, 'app', 'electron', 'loader.html'))
+            win.loadFile(path.join(process.resourcesPath, 'app.asar.unpacked', 'electron', 'loader.html'))
             await loadURL(win);
         }
     } else {

@@ -1,13 +1,20 @@
 appId: com.author.project-name
 productName: project-name
 executableName: project-name
-asar: false
 
 files:
   - electron/**
   - "!electron/build_assets/**"
   - .output/**
   - .env
+  - "!node_modules"
+  - "!node_modules/**/*"
+
+asar: true
+asarUnpack:
+  - .output/**
+  - "!node_modules"
+  - "!node_modules/**/*"
 
 win:
   icon: electron/build_assets/logo.ico

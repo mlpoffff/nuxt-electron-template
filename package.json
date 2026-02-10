@@ -17,13 +17,15 @@
   },
   "dependencies": {
     "dotenv": "^17.2.3",
-    "electron-serve": "^3.0.1",
-    "get-port": "^7.1.0",
     "nuxt": "^4.3.0",
     "vue": "^3.5.27",
     "vue-router": "^4.6.4",
-    "wait-on": "^9.0.3",
+    "get-port": "^7.1.0",
+    "wait-on": "^9.0.3"
+  },
+  "devDependencies": {
     "electron": "^40.1.0",
-    "electron-builder": "^26.4.0"
+    "electron-builder": "^26.4.0",
+    "electron-serve": "^3.0.1"
   }
 }
